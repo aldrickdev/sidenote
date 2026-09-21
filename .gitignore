@@ -1,0 +1,47 @@
+# Dependencies and generated output
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Test and review artifacts
+test-results/
+playwright-report/
+blob-report/
+.impeccable/review/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+.npmrc
+*.local
+secrets.*
+credentials.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa*
+id_ed25519*
+
+# Local user data and packaged extensions
+sidenote-backup-*.json
+*.crx
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editors and operating systems
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
