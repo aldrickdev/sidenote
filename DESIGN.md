@@ -42,7 +42,7 @@ System UI typography keeps the narrow panel familiar and avoids remote font requ
 
 The signature interaction is expanding the reason for saving a link **inside its card**, independently of opening the page. Menus and note links also stop card navigation. Drag grips reorder or move bookmarks; breadcrumb drop targets reach ancestors, while Move to group reaches any depth. Move up/down preserve keyboard access to ordering.
 
-Search remains global regardless of the current breadcrumb. Results replace folder browsing and show a complete group path. Search disables manual ordering because result rank is not group order.
+Search remains global regardless of the current breadcrumb. Results replace folder browsing and show a complete group path. Groups with matching names appear before bookmark results, labeled with their location, and open straight into the group. Search disables manual ordering because result rank is not group order.
 
 Save feedback is one short, low-motion toast. Focus outlines, text selection, caret, and scrollbars use the accent palette. Hover treatments are small color/border changes. Reduced-motion preferences disable animations and transitions. Empty, no-result, loading, unavailable-tab, validation, title-fetch-failure, storage-failure, and destructive-confirmation states are implemented.
 

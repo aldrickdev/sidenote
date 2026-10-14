@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { DragEvent } from 'react';
 import { ArrowDown, ArrowDownToLine, ArrowUp, ChevronDown, ChevronRight, ChevronUp, Folder, FolderPlus, GripVertical, Home, Pencil, Search, Trash2, X } from 'lucide-react';
-import { domain, groupLabel, groupPath, noteSnippet, searchBookmarks } from './model';
+import { domain, groupLabel, groupPath, noteSnippet, searchBookmarks, searchGroups } from './model';
 import type { Bookmark, Group, Library } from './model';
 import { LinkButton, Menu, Notes } from './components';
 import { openUrl } from './storage';
@@ -20,6 +20,7 @@ export function LibraryView(props: Props) {
   const [target, setTarget] = useState<string | null>(null);
   const search = !!query.trim();
   const bookmarks = useMemo(() => search ? searchBookmarks(data, query) : data.bookmarks.filter((b) => b.groupId === groupId), [data, groupId, query, search]);
+  const matchedGroups = useMemo(() => search ? searchGroups(data, query) : [], [data, query, search]);
   const groups = data.groups.filter((g) => g.parentId === groupId).sort((a, b) => a.name.localeCompare(b.name));
   const path = groupPath(data, groupId);
   const current = path.at(-1);
@@ -46,7 +47,7 @@ export function LibraryView(props: Props) {
     };
   }
   return <>
-    <div className="search-box"><Search size={18} /><input ref={searchRef} type="search" aria-label="Search all bookmarks" placeholder="Search titles, links, and notes" value={query} onChange={(event) => onQuery(event.target.value)} />
+    <div className="search-box"><Search size={18} /><input ref={searchRef} type="search" aria-label="Search all bookmarks and groups" placeholder="Search groups, titles, links, and notes" value={query} onChange={(event) => onQuery(event.target.value)} />
       {query && <button className="icon-button" aria-label="Clear search" onClick={() => { onQuery(''); searchRef.current?.focus(); }}><X size={16} /></button>}
     </div>
     <div className="library-toolbar"><nav className="breadcrumbs" aria-label="Group path">
@@ -57,7 +58,19 @@ export function LibraryView(props: Props) {
       {current && <Menu label="Group actions">{(close) => <><button onClick={() => { close(); props.onEditGroup(current); }}><Pencil size={15} />Edit group</button><button className="danger-text" onClick={() => { close(); props.onDeleteGroup(current); }}><Trash2 size={15} />Delete group</button></>}</Menu>}
     </div>}
     </div>
-    {search ? <div className="section-heading"><h1>Search results</h1><span role="status">{bookmarks.length} found</span></div>
+    {search ? <>
+      {matchedGroups.length > 0 && <>
+        <div className="section-heading"><h1>Groups</h1><span>{matchedGroups.length} found</span></div>
+        <section className="groups" aria-label="Groups matching your search">{matchedGroups.map((group) => {
+          const location = groupPath(data, group.parentId);
+          return <div className="group-row" key={group.id}>
+            <button className="group-link" onClick={() => onNavigate(group.id)}><Folder size={18} /><span className="group-name">{group.name}</span><span className="group-count">{location.length ? location.map((g) => g.name).join(' → ') : 'Home'}</span><ChevronRight size={15} /></button>
+            <Menu label={`Actions for group ${group.name}`}>{(close) => <><button onClick={() => { close(); props.onEditGroup(group); }}><Pencil size={15} />Edit group</button><button className="danger-text" onClick={() => { close(); props.onDeleteGroup(group); }}><Trash2 size={15} />Delete group</button></>}</Menu>
+          </div>;
+        })}</section>
+      </>}
+      <div className="section-heading"><h1>Bookmarks</h1><span role="status">{bookmarks.length} found</span></div>
+    </>
       : <>
         {groups.length > 0 && <section className="groups" aria-label="Groups">{groups.map((group) => {
           const count = data.bookmarks.filter((b) => b.groupId === group.id).length;
@@ -69,12 +82,12 @@ export function LibraryView(props: Props) {
         })}</section>}
         <div className="section-heading"><h1>{current ? current.name : 'Ungrouped'}</h1><span>{bookmarks.length} {bookmarks.length === 1 ? 'bookmark' : 'bookmarks'}</span></div>
       </>}
-    {bookmarks.length === 0 ? <div className="empty-state">
+    {bookmarks.length === 0 ? (search && matchedGroups.length > 0 ? <p className="muted">No bookmarks match your search.</p> : <div className="empty-state">
       {search ? <Search size={28} strokeWidth={1.4} /> : <ArrowDownToLine size={28} strokeWidth={1.4} />}
       <h2>{search ? 'No links found.' : data.bookmarks.length === 0 && !groupId ? 'Good links deserve context.' : 'Room for your next find.'}</h2>
       <p>{search ? 'Try a shorter word, a website, or something you wrote in your notes. Search looks through every group.' : 'Save a page and a few words about why it matters. Find both here when you need them.'}</p>
       {!search && <button className="text-button" onClick={props.onAdd}>Save your first link<ChevronRight size={15} /></button>}
-    </div> : <section className="bookmarks" aria-label={search ? 'Search results' : 'Bookmarks'}>{bookmarks.map((bookmark, index) => <BookmarkCard key={bookmark.id} bookmark={bookmark} data={data} query={query} search={search}
+    </div>) : <section className="bookmarks" aria-label={search ? 'Search results' : 'Bookmarks'}>{bookmarks.map((bookmark, index) => <BookmarkCard key={bookmark.id} bookmark={bookmark} data={data} query={query} search={search}
       dragging={dragged === bookmark.id} dropActive={target === `before-${bookmark.id}`} busy={busy}
       onEdit={() => props.onEdit(bookmark)} onMove={() => props.onMove(bookmark)} onDelete={() => props.onDelete(bookmark)}
       onUp={!search && index > 0 ? () => onDrop(bookmark.id, groupId, bookmarks[index - 1].id) : undefined}

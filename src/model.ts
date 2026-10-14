@@ -100,6 +100,13 @@ export function searchBookmarks(data: Library, query: string): Bookmark[] {
     .sort((a, b) => b.score - a.score || b.bookmark.createdAt - a.bookmark.createdAt || a.index - b.index)
     .map(({ bookmark }) => bookmark);
 }
+export function searchGroups(data: Library, query: string): Group[] {
+  const terms = query.toLocaleLowerCase().trim().split(/\s+/).filter(Boolean);
+  if (!terms.length) return [];
+  return data.groups
+    .filter((group) => terms.every((term) => group.name.toLocaleLowerCase().includes(term)))
+    .sort((a, b) => groupLabel(data, a.id).localeCompare(groupLabel(data, b.id)));
+}
 export function noteSnippet(notes: string, query: string): string {
   const plain = plainNotes(notes);
   const terms = query.toLocaleLowerCase().trim().split(/\s+/).filter(Boolean);

@@ -31,7 +31,7 @@ After rebuilding, use **Reload** on Sidenote's extension card in `chrome://exten
 - Supports duplicate URLs with independent notes and group membership.
 - Uses nested groups with folder-like navigation: only immediate groups and directly contained bookmarks appear.
 - Shows top-level groups and ungrouped bookmarks on the home screen.
-- Searches all groups by partial words in titles, URLs, and notes. Multiple words must all match; title matches score above URL matches, which score above notes. Results include full group paths and matching notes snippets.
+- Searches all groups by partial words in titles, URLs, and notes. Multiple words must all match; title matches score above URL matches, which score above notes. Results include full group paths and matching notes snippets. Groups with matching names appear above bookmark results, labeled with their location, and open straight into the group.
 - Opens clicked bookmark cards in a new active tab. The globally configured side panel remains available across tabs.
 - Previews formatted notes; **Show more** expands them without opening the link.
 - Adds new bookmarks at the top. Drag the grip at the bottom-right of a card above another card to reorder; drag into a group or onto a breadcrumb to move. Drag onto Home to ungroup. A **Move to end** target appears while dragging.

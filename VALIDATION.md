@@ -4,19 +4,19 @@
 
 - `npm ci`: clean lockfile installation succeeds.
 - `npm run build`: strict TypeScript check and production bundle pass. The emitted MV3 manifest, worker, UI, and all icon sizes are present under `dist/`. Vite emits only third-party Zod annotation warnings, not application errors.
-- `npm test`: **37 passing unit tests** across the model, worker, and Chrome API adapter.
+- `npm test`: **38 passing unit tests** across the model, worker, and Chrome API adapter.
 - `npm run test:e2e`: **8 passing Chromium extension workflows**. Each uses an isolated temporary profile with the actual built extension and service worker loaded.
 - `npm audit`: **0 reported vulnerabilities** at verification time.
 - UI detector: no findings for the application TSX/CSS files.
 
 ### Unit coverage
 
-Duplicate URLs, optional titles, ordering, edits, moving, deletion, nested group paths, cycle/depth rejection, recursive group deletion/preservation, partial-word search/ranking/snippets, backup roundtrip, consistent export/import size limits, and malformed input rejection, invalid timestamp/URL rejection, stale import protection, serialized concurrent writes, storage quota errors and recovery, corrupted storage preservation, title request permissions/failure behavior, active-tab metadata/fallbacks, and new active tab creation.
+Duplicate URLs, optional titles, ordering, edits, moving, deletion, nested group paths, cycle/depth rejection, recursive group deletion/preservation, partial-word search/ranking/snippets, group-name search with path ordering, backup roundtrip, consistent export/import size limits, and malformed input rejection, invalid timestamp/URL rejection, stale import protection, serialized concurrent writes, storage quota errors and recovery, corrupted storage preservation, title request permissions/failure behavior, active-tab metadata/fallbacks, and new active tab creation.
 
 ### Browser coverage
 
 1. Saving duplicates, safe Markdown rendering, editing, and persistence across reload.
-2. Nested groups, direct-only contents, global notes search with full paths, recursive ungrouping.
+2. Nested groups, direct-only contents, global notes search with full paths, group-name search results with locations and click-through navigation, recursive ungrouping.
 3. Real drag-to-reorder and drag-to-group, keyboard reordering, menu-based moves to nested groups.
 4. Clicking a card opens a distinct active tab; extension page remains intact and side-panel action behavior is enabled.
 5. Export download, malformed import rejection, confirmation before replacement, and theme override.

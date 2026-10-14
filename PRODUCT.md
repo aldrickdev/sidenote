@@ -19,7 +19,7 @@ Chrome desktop side panel, on one computer. Clicking a card opens the URL in a n
 - Markdown source editor with preview toggle; formatted saved notes, short previews, and expandable long notes.
 - Nested groups; a group shows only directly contained bookmarks and immediate subgroups. Home shows top-level groups and ungrouped bookmarks. Breadcrumb navigation.
 - Three-dot card menu: edit, move to group, delete. Drag to reorder and move into groups. New entries prepend to the destination.
-- Global partial-word search across title, URL, and notes. Rank title before URL before notes. Show group paths and matching note snippets.
+- Global partial-word search across title, URL, and notes. Rank title before URL before notes. Show group paths and matching note snippets. Groups with matching names surface above bookmark results, labeled with their location.
 - Group deletion offers either deleting all descendants and bookmarks or preserving bookmarks in Ungrouped.
 - Compact horizontal cards with title, domain, and notes preview. Clean appearance, system light/dark mode with explicit override.
 - Backup export/import preserves all notes, nesting, and custom order.

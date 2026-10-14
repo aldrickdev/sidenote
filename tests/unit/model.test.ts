@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { applyAction, descendants, emptyLibrary, groupLabel, groupPath, isWebUrl, librarySchema, noteSnippet, parseBackup, searchBookmarks } from '../../src/model';
+import { applyAction, descendants, emptyLibrary, groupLabel, groupPath, isWebUrl, librarySchema, noteSnippet, parseBackup, searchBookmarks, searchGroups } from '../../src/model';
 import type { BookmarkInput, Library } from '../../src/model';
 
 function add(data: Library, id: string, overrides: Partial<BookmarkInput> = {}, time = 10) {
@@ -90,6 +90,17 @@ describe('global search', () => {
     expect(searchBookmarks(data, 'Caching ref').map((b) => b.id)).toEqual(['title']);
     expect(searchBookmarks(data, '   ')).toEqual([]);
     expect(searchBookmarks(data, 'missing')).toEqual([]);
+  });
+  it('matches groups by partial words in their names, ordered by full path', () => {
+    let data = fixture();
+    data = applyAction(data, { type: 'saveGroup', id: 'reading', name: 'Weekend reading', parentId: null, create: true });
+    expect(searchGroups(data, 'work').map((g) => g.id)).toEqual(['work']);
+    expect(searchGroups(data, 'DEV').map((g) => g.id)).toEqual(['dev']);
+    expect(searchGroups(data, 'week read').map((g) => g.id)).toEqual(['reading']);
+    expect(searchGroups(data, 'work dev')).toEqual([]);
+    expect(searchGroups(data, 'e').map((g) => g.id)).toEqual(['reading', 'dev']);
+    expect(searchGroups(data, '   ')).toEqual([]);
+    expect(searchGroups(data, 'missing')).toEqual([]);
   });
   it('shows a snippet around a notes match beyond the initial preview', () => {
     const text = `${'Introduction '.repeat(40)}Fix the deployment issue tomorrow. ${'More context '.repeat(40)}`;

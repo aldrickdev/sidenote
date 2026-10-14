@@ -114,6 +114,15 @@ test('nested groups show only direct contents; search is global and shows paths'
   await expect(page.locator('.bookmark-title')).toHaveText(['Database migration']);
   await expect(page.locator('.result-path')).toHaveText('Work → Dev');
   await page.getByRole('button', { name: 'Clear search' }).click();
+  await page.getByRole('searchbox').fill('dev');
+  await expect(page.locator('.group-row')).toHaveCount(1);
+  await expect(page.locator('.group-row .group-name')).toHaveText('Dev');
+  await expect(page.locator('.group-row .group-count')).toHaveText('Work');
+  await expect(page.getByText('No bookmarks match your search.')).toBeVisible();
+  await page.locator('.group-row .group-link').click();
+  await expect(page.getByRole('searchbox')).toHaveValue('');
+  await expect(page.locator('.bookmark-title')).toHaveText(['Database migration']);
+  await page.getByRole('navigation', { name: 'Group path' }).getByRole('button', { name: 'Work', exact: true }).click();
   await page.getByRole('button', { name: 'Group actions' }).click();
   await page.getByRole('button', { name: 'Delete group', exact: true }).click();
   await page.getByRole('button', { name: 'Keep bookmarks in Ungrouped' }).click();
